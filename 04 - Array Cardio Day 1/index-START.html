@@ -38,6 +38,9 @@
     
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    console.log("Question 1:");
+
+    //my solution
     const oldInventors = new Array();
     let oldArrayCount = 0;
     for (let i = 0; i < inventors.length; i++) {
@@ -48,23 +51,73 @@
     }
     console.log(oldInventors);
 
+    //video solution
     const fifteeen = inventors.filter((obj) => {
       return obj.year >= 1500 && obj.year < 1600;
     });
     console.log(fifteeen);
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
-    
+    console.log("Question 2:");
+
+    //my solution
+    const firstLast = new Array();
+
+    for (let i = 0; i < inventors.length; i++) {
+      firstLast[i] = `${inventors[i].first} ${inventors[i].last}`;
+    }
+
+    //vidoe solution
+    console.log(firstLast);
+
+    const fullName = inventors.map((obj) => {
+      return `${obj.first} ${obj.last}`;
+    });
+
+    console.log(fullName);
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    console.log("Question 3:");
 
+    const oldToYoung = inventors.sort((a,b) => {
+      return a.year - b.year;
+    });
+
+    console.log(oldToYoung);
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    console.log("Question 4:");
+
+    //my solution
+    const yearsTotal = inventors.reduce((acc,obj) => {
+      return acc + (obj.passed - obj.year); 
+    },0);
+
+    console.log(yearsTotal);
 
     // 5. Sort the inventors by years lived
+    console.log("Question 5:");
+
+    const longLived = inventors.sort((a,b) => {
+      return  (b.passed - b.year) - (a.passed - a.year);
+    });
+
+    console.log(longLived);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
-    // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+    const url = "https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris";
+
+    fetch(url).then((response) =>response.text()).then(html => {
+      // Use the DOMParser API to parse the HTML content into a DOM object
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      const category = [...doc.querySelectorAll('div.mw-category-group ul li')];
+
+      console.log(category);
+    }).catch(error => console.log(error));
+
+    
 
 
     // 7. sort Exercise

@@ -15,6 +15,9 @@
         <div class="hand second-hand"></div>
       </div>
     </div>
+    <div id="timer">
+      Time: 
+    </div>
 
 
   <style>
@@ -33,6 +36,7 @@
       flex: 1;
       min-height: 100vh;
       align-items: center;
+      flex-direction: column;
     }
 
     .clock {
@@ -63,12 +67,36 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: transform 1s;
+      transition-timing-function: cubic-bezier(1, 1.5, 0.565, 1);
     }
 
   </style>
 
   <script>
+    const secondHand = document.querySelector(".second-hand");
+    const minHand = document.querySelector(".min-hand");
+    const hourHand = document.querySelector(".hour-hand");
+    const timer = document.querySelector("#timer");
     
+    function updateTime () {
+      const time = new Date();
+      const second = time.getSeconds();
+      const min = time.getMinutes();
+      const hour = time.getHours();
+      [secondHand, minHand, hourHand].forEach(element => element.style.transition = (second === 0) ? "none" : null);
+      secondHand.style.transform = `rotate(${second*6+90}deg)`;
+      minHand.style.transform = `rotate(${min*6+90}deg)`;
+      hourHand.style.transform = `rotate(${hour*30+90}deg)`;
+      timer.textContent = "Timer: " + second + " " + min + " " + hour;
+    };
+
+    setInterval(updateTime, 1000);
+
+    //const thirty = setInterval(updateTime(), 1000);
+
   </script>
 </body>
 </html>

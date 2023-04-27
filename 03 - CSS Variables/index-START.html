@@ -46,22 +46,26 @@
   </style>
 
   <script>
-    const spacing = document.getElementById("spacing");
-    const blur = document.getElementById("blur");
-    const base = document.getElementById("base");
+    const root = document.querySelector("*");
+    const input = document.querySelectorAll("input");
     const img = document.querySelector("img");
+    const hl = document.querySelector(".hl");
 
-    spacing.addEventListener("input", () => {
-      img.style.padding = spacing.value + "px";
+    hl.style.setProperty("color", "var(--base)");
+    img.style.backgroundColor = "var(--base)";
+    img.style.filter = "blur(var(--blur))";
+    img.style.padding = "var(--spacing)";
+    
+    input.forEach(input => {
+      const suffix = input.dataset.sizing || "";
+      root.style.setProperty(`--${input.name}`,input.value + suffix);
+      input.addEventListener('input',updateCSS);
     });
-
-    blur.addEventListener("input", () => {
-      img.style.filter = "blur(" + blur.value + "px)";
-    });
-
-    base.addEventListener("input", () => {
-      img.style.backgroundColor = base.value;
-    });
+    
+    function updateCSS() {
+      console.log(this.value);
+      root.style.setProperty(`--${this.name}`,this.value + (this.dataset.sizing || ""));
+    }
 
   </script>
 

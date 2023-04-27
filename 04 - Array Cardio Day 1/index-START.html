@@ -147,6 +147,7 @@
 
     const transport = data.reduce((obj, elmnt) => {
       if(!obj[elmnt]) {obj[elmnt] = 0;};
+      
       obj[elmnt]++;
       return obj;
     },{});

@@ -46,6 +46,23 @@
   </style>
 
   <script>
+    const spacing = document.getElementById("spacing");
+    const blur = document.getElementById("blur");
+    const base = document.getElementById("base");
+    const img = document.querySelector("img");
+
+    spacing.addEventListener("input", () => {
+      img.style.padding = spacing.value + "px";
+    });
+
+    blur.addEventListener("input", () => {
+      img.style.filter = "blur(" + blur.value + "px)";
+    });
+
+    base.addEventListener("input", () => {
+      img.style.backgroundColor = base.value;
+    });
+
   </script>
 
 </body>

@@ -107,6 +107,7 @@
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     const url = "https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris";
 
+    /*
     fetch(url).then((response) =>response.text()).then(html => {
       // Use the DOMParser API to parse the HTML content into a DOM object
       const parser = new DOMParser();
@@ -116,17 +117,41 @@
 
       console.log(category);
     }).catch(error => console.log(error));
+    */
 
-    
-
+    const req = new XMLHttpRequest();
+    req.open('GET', "boulevards.html", true);
+    req.onload = () => {
+      if(req.status == 200) {
+        const htmlString = req.responseText;
+        const parser = new DOMParser();
+        const htmlDoc = parser.parseFromString(htmlString, 'text/html');
+        const category = [...htmlDoc.querySelectorAll('div.mw-category-group ul li a')];
+        const de = category.map(cat => cat.textContent).filter(text => text.includes("de"));
+        console.log(de);
+      };
+    };
+    req.send();
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const peopleLastName = people.map(people => people.split(",")[0]).sort();
+    console.log(peopleLastName);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const car = data.reduce((acc, data) => data == "car" ? ++acc : acc, 0);
+    const truck = data.reduce((acc, data) => data == "truck" ? ++acc : acc, 0);
+    console.log("The number of cars is " + car + ", and the number of trucks is " + truck);
 
+    const transport = data.reduce((obj, elmnt) => {
+      if(!obj[elmnt]) {obj[elmnt] = 0;};
+      obj[elmnt]++;
+      return obj;
+    },{});
+
+    console.log(transport);
   </script>
 </body>
 </html>

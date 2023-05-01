@@ -16,8 +16,48 @@
     </ul>
   </form>
 <script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+  const input = document.querySelector("input");
+  const list = document.querySelector("ul.suggestions");
+  const cities = [];
+
+  fetch(endpoint)
+    .then(response => response.json())
+    .then(data => {
+      cities.push(...data);
+    }).catch(err => console.log(err));
+
+  input.addEventListener("input", filterName);
+
+  function filterName () {
+    const regex = new RegExp(this.value, "gi");
+    let matches = cities.filter(cities => cities.city.match(regex) || cities.state.match(regex));
+    matchList(matches, this.value);
+  }
+
+  function matchList (matches, matchString) {
+    list.innerHTML = "";
+    matches.forEach(element => {
+      const li = document.createElement("li");
+      list.appendChild(li);
+
+      const regex = new RegExp(matchString, "gi");
+      const cityName = element.city.replace(regex, `<span class="hl">${matchString}</span>`);
+      const stateName = element.state.replace(regex, `<span class="hl">${matchString}</span>`);
+
+      const nameSpan = document.createElement("span");
+      nameSpan.innerHTML = `${cityName}, ${stateName}`;
+      nameSpan.classList.add("name");
+
+      const popSpan = document.createElement("span");
+      popSpan.textContent = element.population;
+      popSpan.classList.add("population");
+
+      li.appendChild(nameSpan);
+      li.appendChild(popSpan);
+    });
+  }
 </script>
 </body>
 </html>

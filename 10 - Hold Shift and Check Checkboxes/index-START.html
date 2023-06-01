@@ -97,6 +97,51 @@
   </div>
 
 <script>
+  const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+
+  let keyHeld = false;
+  
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change',() => {
+      checkbox.classList.toggle('checked');
+      if(checkbox.checked && keyHeld) {
+        checkTest(checkbox);
+      }
+    });
+  });
+
+  function checkTest(checkbox) {
+    const endIndex = checkboxes.indexOf(checkbox);
+    let startIndex = 0;
+    for(let i = 0; i < endIndex; i++) {
+      if(checkboxes[i].checked) {
+        startIndex = i;
+      }
+    }
+    autoCheck(startIndex, endIndex);
+  };
+
+  function autoCheck(a,b) {
+    for(let i = a; i < b; i++) {
+      checkboxes[i].checked = true;
+    }
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Shift') {
+      keyHeld = true;
+      console.log('Key held down');
+    }
+    
+  });
+
+  document.addEventListener('keyup', (event) => {
+    if (event.key === 'Shift') {
+      keyHeld = false;
+      console.log('Key released.');
+    }
+  });
+
 </script>
 </body>
 </html>

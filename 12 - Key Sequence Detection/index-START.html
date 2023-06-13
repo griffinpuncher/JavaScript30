@@ -8,6 +8,24 @@
 </head>
 <body>
 <script>
+  const code = "monkey";
+  const codeArray = [];
+  const pressedArray = [];
+
+
+  document.addEventListener("keyup", (e) => {
+    pressedArray.push(e.key);
+    pressedArray.splice(-code.length - 1, pressedArray.length - code.length);
+    console.log(pressedArray);
+    if(pressedArray.join('').includes(code)) {
+      cornify_add();
+    }
+    if (pressedArray.length == code.length) {
+      pressedArray.splice(0,pressedArray.length);
+    }
+  });
+
+  
 </script>
 </body>
 </html>

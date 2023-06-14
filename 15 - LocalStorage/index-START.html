@@ -24,12 +24,75 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <button>reset localData</button>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const resetButton = document.querySelector('button');
+  const storedItems = localStorage.getItem('itemsStart');
+  let items = [];
+
+  try {
+    items = JSON.parse(storedItems) || [];
+  } catch (error) {
+    console.log('Error parsing JSON:', error);
+    // Handle the error accordingly, e.g., provide a default value for items
+  }
+
+  function populateList(plates = []) {
+    itemsList.innerHTML = plates.map((plate, i) => {
+      return `
+        <li>
+          <input type='checkbox' data-index=${i} id='item${i}' ${plate.checked ? 'checked' : ""}>
+          <label for='item${i}'>${plate.itemName}</label>
+      `
+    }).join('');
+    addCheckListen();
+  }
+
+  function itemAdd(e) {
+    e.preventDefault();
+    const itemName = (this.querySelector('[name=item]')).value;
+    const newItem = {
+      itemName,
+      checked: false
+    }
+    items.push(newItem);
+    populateList(items);
+    localStorage.setItem('itemsStart',JSON.stringify(items));
+    this.reset();
+  }
+
+  function toggleCheck(e) {
+    console.log("changed!");
+    const target = e.target;
+    if(target.checked) {
+      items[target.dataset.index].checked = true;
+    }
+    else {
+      items[target.dataset.index].checked = false;
+    }
+    localStorage.setItem('itemsStart',JSON.stringify(items));
+  }
+
+  function addCheckListen() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    checkboxes.forEach(function(checkbox) {
+      checkbox.addEventListener('change', toggleCheck);
+  });
+  }
+
+  addItems.addEventListener('submit', itemAdd);
+
+  resetButton.addEventListener('click',() => {
+    localStorage.removeItem('itemsStart');
+    populateList();
+  });
+
+  populateList(items);
 
 </script>
 

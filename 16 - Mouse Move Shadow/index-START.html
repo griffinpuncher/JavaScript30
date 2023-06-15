@@ -36,6 +36,24 @@
   </style>
 
 <script>
+  const hero = document.querySelector('.hero');
+  const text = hero.querySelector('h1');
+
+  function shadow(e) {
+    const middleCoordinates = [this.offsetWidth/2, this.offsetHeight/2];
+    const mouseCoordinates = [e.clientX, e.clientY];
+    const mouseDelta = [mouseCoordinates[0]-middleCoordinates[0],mouseCoordinates[1]-middleCoordinates[1]];
+    
+    text.style.textShadow = `
+      ${-mouseDelta[0]/3}px ${-mouseDelta[1]/3}px 4px rgba(250, 1, 211, 0.5),
+      ${-mouseDelta[1]/3}px ${-mouseDelta[0]/3}px 4px rgba(1, 250, 211, 0.5),
+      ${-mouseDelta[0]/3}px ${mouseDelta[1]/3}px 4px rgba(1, 250, 1, 0.5),
+      ${mouseDelta[1]/3}px ${-mouseDelta[0]/3}px 4px rgba(250, 1, 1, 0.5)
+      `;
+
+  }
+
+  hero.addEventListener('mousemove',shadow);
 </script>
 </body>
 </html>

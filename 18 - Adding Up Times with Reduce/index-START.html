@@ -183,6 +183,27 @@
     </li>
   </ul>
 <script>
+  const videoList = [...document.querySelectorAll('li')];
+
+  console.log(videoList);
+
+  const seconds = videoList.reduce((acc, video) => {
+    console.log(video.dataset.time);
+    const timeArray = video.dataset.time.split(':');
+    const minutes = parseInt(timeArray[0]);
+    const seconds = parseInt(timeArray[1]);
+    const totalSeconds = minutes * 60 + seconds;
+    return acc + totalSeconds;
+  }, 0);
+
+  const hours = Math.floor(seconds/60/60) > 10 ? `${Math.floor(seconds/60/60)}` : `0${Math.floor(seconds/60/60)}`;
+  const minutes = Math.floor((seconds/60)%60) > 10 ? `${Math.floor((seconds/60)%60)}` : `0${Math.floor((seconds/60)%60)}`;
+  const sec = seconds%60 > 10 ? `${seconds%60}` : `0${seconds%60}`;
+
+  const timeString = [hours,minutes,sec].join(':');
+
+  console.log(timeString);
+  console.log(seconds/60/60);
 </script>
 </body>
 </html>

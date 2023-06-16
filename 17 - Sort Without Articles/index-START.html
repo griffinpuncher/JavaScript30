@@ -18,6 +18,10 @@
       min-height: 100vh;
     }
 
+    form {
+      flex: .5;
+    }
+
     #bands {
       list-style: inside square;
       font-size: 20px;
@@ -45,10 +49,41 @@
   </style>
 
   <ul id="bands"></ul>
+  <form action="" class="add">
+    <input type="text">
+    <input type="submit">
+  </form>
 
 <script>
 const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+const listView = document.getElementById('bands');
+const titleSubmissionForm = document.querySelector('.add');
 
+function formatTitle(title) {
+  return title.replace(/^(an|a|the)\s/i, '').trim();
+}
+
+function listInsert(sortedList) {
+  listView.innerHTML = sortedList.map(item => `<li>${item}`).join('');
+}
+
+function submitTitle(e) {
+  e.preventDefault();
+  bands.push(e.target.querySelector('[type=text]').value);
+  sortBands();
+  e.target.reset();
+}
+
+function sortBands() {
+  const sortedBands = bands.sort((a, b) => formatTitle(a) > formatTitle(b) ? 1 : -1);
+  listInsert(sortedBands);
+}
+
+//listeners
+titleSubmissionForm.addEventListener('submit', submitTitle);
+
+//on start
+sortBands();
 
 </script>
 

@@ -24,7 +24,16 @@
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 }, 10)
         }
+
+        function takePhoto() {
+                snap.currentTime = 0;
+                snap.play();
+
+                const data = canvas.toDataURL('image/jpeg');
+                console.log(data);
+        }
         
         getVideo();
-        paintToCanvas();
+
+        video.addEventListener('canplay', paintToCanvas);
 //});

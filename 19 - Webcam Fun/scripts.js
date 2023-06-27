@@ -6,6 +6,13 @@
         const strip = document.querySelector('.strip');
         const snap = document.querySelector('.snap');
 
+        const parameterInputs = document.querySelectorAll('.rgb input');
+        let isExecuting = false;
+        let callbackQueue = [];
+
+        const inputLog = {};
+        let offset = [110,-250,200];
+
         ctx.canvas.willReadFrequently = true;
 
         function getVideo() {
@@ -25,11 +32,14 @@
                 setInterval(()=>{
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                         let pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                        pixels = rgbSplit(pixels);
+                        pixels = greenScreen(pixels);
+                        //pixels = rgbSplit(pixels);
+                        //ctx.globalAlpha = .1;
                         //pixels = redEffect(pixels);
                         ctx.putImageData(pixels, 0, 0);
+                        
                 }, 48)
-        }
+        };
 
         function redEffect(pixels) {
                 for(let i = 0; i < pixels.data.length; i += 4) {
@@ -41,27 +51,29 @@
         }
 
         function rgbSplit(pixels) {
-                const inputLog = {};
-
-                document.querySelectorAll('.rgb input').forEach((input)=>{
-                        inputLog[input.name] = input.value;
-                });
-
-                console.log(inputLog);
+                const startTime = performance.now();
 
                 for(let i = 0; i < pixels.data.length; i += 4) {
-                        pixels.data[i + 250] = pixels.data[i + 0];
-                        pixels.data[i - 250] = pixels.data[i + 1];
-                        pixels.data[i + 150] = pixels.data[i + 2]; 
+                        pixels.data[i + offset[0]] = pixels.data[i + 0];
+                        pixels.data[i - offset[1]] = pixels.data[i + 1];
+                        pixels.data[i + offset[2]] = pixels.data[i + 2]; 
                 }
+                const endtime = performance.now();
+                console.log(endtime - startTime);
                 return pixels;
         }
 
-        function greenScreen() {
+        function greenScreen(pixels) {
                 for(let i = 0; i < pixels.data.length; i += 4) {
-                        pixels.data[i + 0] *= 3;
-                        pixels.data[i + 1] *= .75;
-                        pixels.data[i + 2] *= .5; 
+                        red = pixels.data[i + 0];
+                        green = pixels.data[i + 1];
+                        blue = pixels.data[i + 2];
+                        alpha = pixels.data[i + 3];
+                        if(red >= inputLog.rmin && red <= inputLog.rmax &&
+                                green >= inputLog.gmin && green <= inputLog.gmax &&
+                                blue >= inputLog.bmin && blue <= inputLog.bmax) {
+                                pixels.data[i + 3] = 0;
+                        }
                 }
                 return pixels;
         }
@@ -77,8 +89,22 @@
                 link.innerHTML = `<img src='${data}' alt='Download image'>`;
                 strip.insertBefore(link, strip.firstChild);
         }
-        
+
+        function updateParameters() {
+                parameterInputs.forEach((input)=>{
+                        inputLog[input.name] = input.value;
+                });
+                offset = [inputLog.roff,inputLog.goff,inputLog.boff];
+                console.log(inputLog);
+        }
+
+        updateParameters()
+
         getVideo();
 
         video.addEventListener('canplay', paintToCanvas);
+
+        parameterInputs.forEach((input)=>{
+                input.addEventListener('input' ,updateParameters)
+        });
 //});

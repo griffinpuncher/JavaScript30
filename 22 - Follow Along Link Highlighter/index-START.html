@@ -25,8 +25,26 @@
       <p>Esse quibusdam, ad, ducimus cupiditate <a href="">nulla</a>, quae magni odit <a href="">totam</a> ut consequatur eveniet sunt quam provident sapiente dicta neque quod.</p>
       <p>Aliquam <a href="">dicta</a> sequi culpa fugiat <a href="">consequuntur</a> pariatur optio ad minima, maxime <a href="">odio</a>, distinctio magni impedit tempore enim repellendus <a href="">repudiandae</a> quas!</p>
     </div>
+    <span class="highlight"></span>
 
   <script>
+    const links = document.querySelectorAll('a');
+    const highlight = document.querySelector('.highlight');
+
+    //functions
+    const highlightLink = function() {
+      const position = this.getBoundingClientRect();
+      console.log(position);
+      highlight.style.width = `${position.width}px`;
+      highlight.style.height = `${position.height}.px`;
+      highlight.style.transform = `translate(${position.left + window.scrollX}px, ${position.top + window.scrollY}px)`;
+      //highlight.style.top = `${position.top + window.scrollY}px`;
+      //highlight.style.left = `${position.left + window.scrollX}px`;
+    }
+
+    //triggers
+    links.forEach(link => link.addEventListener('mouseenter',highlightLink));
+
     // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
   </script>
 </body>

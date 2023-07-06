@@ -221,6 +221,24 @@
 </style>
 
 <script>
+  const linkList = document.querySelectorAll('ul.cool > li');
+
+  //functions
+  const triggerEnter = function() {
+    console.log(this);
+    this.classList.add('trigger-enter');
+    this.classList.add('trigger-enter-active');
+  }
+
+  const triggerLeave = function() {
+    this.classList.remove('trigger-enter');
+    this.classList.remove('trigger-enter-active');  
+  }
+
+  //calls + listeners
+  linkList.forEach(link => link.addEventListener('mouseenter', triggerEnter));
+  linkList.forEach(link => link.addEventListener('mouseleave', triggerLeave));
+  console.log(linkList);
 </script>
 
 </body>
